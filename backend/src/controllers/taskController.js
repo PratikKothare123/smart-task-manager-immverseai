@@ -26,14 +26,30 @@ const createTask = (req, res) => {
         });
     }
 
-    const newTask = {
-        id: randomUUID(),
-        title,
-        description,
-        priority,
-        status,
-        assignedTo
-    };
+
+//Depends On for Task 
+if (dependsOn) {
+    const dependencyTask = tasks.find(
+        (task) => task.id === dependsOn
+    );
+
+    if (!dependencyTask) {
+        return res.status(404).json({
+            message: "Dependency task not found"
+        });
+    }
+}
+
+
+const newTask = {
+    id: randomUUID(),
+    title,
+    description,
+    priority,
+    status,
+    assignedTo,
+    dependsOn: dependsOn || null
+};
 
     tasks.push(newTask);
 
@@ -42,6 +58,8 @@ const createTask = (req, res) => {
         task: newTask
     });
 };
+
+//Get All tasks
 
 const getAllTasks = (req, res) => {
     res.json({
@@ -83,7 +101,8 @@ const updateTask = (req, res) => {
         description,
         priority,
         status,
-        assignedTo
+        assignedTo,
+        dependsOn
     } = req.body;
 
     // If assignedTo is provided, verify that user exists
@@ -122,9 +141,31 @@ const updateTask = (req, res) => {
     });
 };
 
+//Deletee  Task
+const deleteTask = (req, res) => {
+    const { id } = req.params;
+
+    const taskIndex = tasks.findIndex((task) => task.id === id);
+
+    if (taskIndex === -1) {
+        return res.status(404).json({
+            message: "Task not found"
+        });
+    }
+
+    const deletedTask = tasks.splice(taskIndex, 1);
+
+    res.json({
+        message: "Task deleted successfully",
+        task: deletedTask[0]
+    });
+};
+
+
 module.exports = {
     createTask,
     getAllTasks,
     getTaskById,
-    updateTask
+    updateTask,
+    deleteTask
 };
