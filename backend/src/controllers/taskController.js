@@ -207,6 +207,16 @@ const deleteTask = (req, res) => {
     });
 };
 
+//block task APi 
+const getBlockedTasks = (req, res) => {
+    const blockedTasks = tasks.filter((task) => {
+        return isTaskBlocked(task);
+    });
+
+    res.json({
+        tasks: blockedTasks
+    });
+};
 
 module.exports = {
     createTask,
@@ -214,5 +224,6 @@ module.exports = {
     getTaskById,
     updateTask,
     deleteTask,
-    markTaskComplete
+    markTaskComplete,
+    getBlockedTasks
 };
