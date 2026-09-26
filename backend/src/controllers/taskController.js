@@ -3,6 +3,66 @@ const { randomUUID } = require("crypto");
 const tasks = require("../models/taskModel");
 const users = require("../models/userModel");
 
+const isTaskBlocked = (task) => {
+    // Task has no dependency
+    if (!task.dependsOn) {
+        return false;
+    }
+
+    // Find the dependency task
+    const dependencyTask = tasks.find(
+        (item) => item.id === task.dependsOn
+    );
+
+    // Dependency doesn't exist
+    if (!dependencyTask) {
+        return true;
+    }
+
+    // Task is blocked until dependency is Done
+    return dependencyTask.status !== "Done";
+};
+
+
+//Depends On for Task 
+if (dependsOn) {
+    const dependencyTask = tasks.find(
+        (task) => task.id === dependsOn
+    );
+
+    if (!dependencyTask) {
+        return res.status(404).json({
+            message: "Dependency task not found"
+        });
+    }
+}
+
+const markTaskComplete = (req, res) => {
+    const { id } = req.params;
+
+    const task = tasks.find((task) => task.id === id);
+
+    if (!task) {
+        return res.status(404).json({
+            message: "Task not found"
+        });
+    }
+
+    // Check whether task is blocked
+    if (isTaskBlocked(task)) {
+        return res.status(400).json({
+            message: "Task cannot be completed because its dependency is not completed"
+        });
+    }
+
+    task.status = "Done";
+
+    res.json({
+        message: "Task marked as completed",
+        task
+    });
+};
+
 const createTask = (req, res) => {
     const {
         title,
@@ -27,19 +87,6 @@ const createTask = (req, res) => {
     }
 
 
-//Depends On for Task 
-if (dependsOn) {
-    const dependencyTask = tasks.find(
-        (task) => task.id === dependsOn
-    );
-
-    if (!dependencyTask) {
-        return res.status(404).json({
-            message: "Dependency task not found"
-        });
-    }
-}
-
 
 const newTask = {
     id: randomUUID(),
@@ -60,7 +107,6 @@ const newTask = {
 };
 
 //Get All tasks
-
 const getAllTasks = (req, res) => {
     res.json({
         tasks
@@ -167,5 +213,6 @@ module.exports = {
     getAllTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    markTaskComplete
 };
