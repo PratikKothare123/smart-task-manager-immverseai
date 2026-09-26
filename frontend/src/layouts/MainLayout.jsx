@@ -7,7 +7,8 @@ const MainLayout = () => {
             <Sidebar />
 
             <main className="main-content">
-                <Outlet />
+                <Outlet />       
+                {/* Render the currently selected page here */}
             </main>
         </div>
     );
