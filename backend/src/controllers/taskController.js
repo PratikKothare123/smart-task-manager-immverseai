@@ -120,8 +120,29 @@ const updateTask = (req, res) => {
     });
   }
 
-  const { title, description, priority, status, assignedTo, dependsOn } =
+  const { 
+    title, 
+    description, 
+    priority, 
+    status, 
+    assignedTo, 
+    dependsOn } =
     req.body;
+
+  const validPriorities = ["Low", "Medium", "High"];
+  const validStatuses = ["To Do", "In Progress", "Done"];
+
+  if (priority !== undefined && !validPriorities.includes(priority)) {
+    return res.status(400).json({
+      message: "Invalid priority",
+    });
+  }
+
+  if (status !== undefined && !validStatuses.includes(status)) {
+    return res.status(400).json({
+      message: "Invalid status",
+    });
+  }
 
   // If assignedTo is provided, verify user exists
   if (assignedTo !== undefined) {
