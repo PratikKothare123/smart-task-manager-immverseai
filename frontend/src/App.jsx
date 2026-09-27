@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import MainLayout from "./layouts/MainLayout";
+import { AuthProvider } from "./context/AuthContext";
 
+import MainLayout from "./layouts/MainLayout";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import MyTasks from "./pages/MyTasks";
 import AllTasks from "./pages/AllTasks";
@@ -10,40 +12,46 @@ import Users from "./pages/Users";
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-
-                <Route element={<MainLayout />}>
-
-                    <Route
-                        path="/"
-                        element={<Dashboard />}
-                    />
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
 
                     <Route
-                        path="/my-tasks"
-                        element={<MyTasks />}
+                            path="/login"
+                            element={<Login />}
                     />
+                    <Route element={<MainLayout />}>
 
-                    <Route
-                        path="/all-tasks"
-                        element={<AllTasks />}
-                    />
+                        <Route
+                            path="/"
+                            element={<Dashboard />}
+                        />
 
-                    <Route
-                        path="/blocked-tasks"
-                        element={<BlockedTasks />}
-                    />
+                        <Route
+                            path="/my-tasks"
+                            element={<MyTasks />}
+                        />
 
-                    <Route
-                        path="/users"
-                        element={<Users />}
-                    />
+                        <Route
+                            path="/all-tasks"
+                            element={<AllTasks />}
+                        />
 
-                </Route>
+                        <Route
+                            path="/blocked-tasks"
+                            element={<BlockedTasks />}
+                        />
 
-            </Routes>
-        </BrowserRouter>
+                        <Route
+                            path="/users"
+                            element={<Users />}
+                        />
+
+                    </Route>
+
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 
