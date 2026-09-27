@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
 import MainLayout from "./layouts/MainLayout";
+// import Login from "./pages/Login";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import MyTasks from "./pages/MyTasks";
 import AllTasks from "./pages/AllTasks";
@@ -19,6 +21,10 @@ function App() {
                     <Route
                             path="/login"
                             element={<Login />}
+                    />
+                    <Route 
+                            path="/signup" 
+                            element={<Signup />} 
                     />
                     <Route element={<MainLayout />}>
 

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { createUser } from "../services/userService";
 
-const Login = () => {
+const Signup = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
 
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -18,9 +19,14 @@ const Login = () => {
             setLoading(true);
             setError("");
 
-            await login(email, password);
+            await createUser({
+                name,
+                email,
+                password
+            });
 
-            navigate("/");
+            navigate("/login");
+
         } catch (error) {
             setError(error.message);
         } finally {
@@ -35,13 +41,31 @@ const Login = () => {
 
                 <div className="auth-content">
 
-                    <h1>Welcome back!</h1>
+                    <h1>Create Account</h1>
 
                     <p className="auth-subtitle">
-                        Please enter your email and password
+                        Enter details to register a new account
                     </p>
 
                     <form onSubmit={handleSubmit}>
+
+                        <div className="auth-form-group">
+                            <label>Full Name</label>
+
+                            <div className="auth-input-wrapper">
+                                <span>♙</span>
+
+                                <input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    value={name}
+                                    onChange={(e) =>
+                                        setName(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                        </div>
 
                         <div className="auth-form-group">
                             <label>Email Address</label>
@@ -90,16 +114,16 @@ const Login = () => {
                             className="auth-submit-button"
                             disabled={loading}
                         >
-                            {loading ? "Logging in..." : "Log In  →"}
+                            {loading ? "Creating..." : "Sign Up  →"}
                         </button>
 
                     </form>
 
                     <p className="auth-switch">
-                        Don't have an account?
+                        Already have an account?
                         {" "}
-                        <Link to="/signup">
-                            Sign Up
+                        <Link to="/login">
+                            Log In
                         </Link>
                     </p>
 
@@ -111,4 +135,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;

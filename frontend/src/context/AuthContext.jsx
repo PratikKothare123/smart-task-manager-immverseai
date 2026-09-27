@@ -4,7 +4,17 @@ import { loginUser } from "../services/userService";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    // Initialize currentUser from localStorage so state persists on page refresh
+    const [currentUser, setCurrentUser] = useState(() => {
+        const savedUser = localStorage.getItem("currentUser");
+        try {
+            return savedUser ? JSON.parse(savedUser) : null;
+        } catch (error) {
+            console.error("Error reading currentUser from localStorage:", error);
+            return null;
+        }
+    });
+
     const [loading, setLoading] = useState(false);
 
     const login = async (email, password) => {
@@ -13,10 +23,13 @@ export const AuthProvider = ({ children }) => {
         try {
             const data = await loginUser({
                 email,
-                password
+                password,
             });
 
             setCurrentUser(data.user);
+
+            // Persist logged-in user in localStorage
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
 
             return data;
         } finally {
@@ -26,6 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setCurrentUser(null);
+        localStorage.removeItem("currentUser");
     };
 
     return (
@@ -34,7 +48,7 @@ export const AuthProvider = ({ children }) => {
                 currentUser,
                 loading,
                 login,
-                logout
+                logout,
             }}
         >
             {children}

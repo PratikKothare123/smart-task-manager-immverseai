@@ -3,7 +3,17 @@ const { randomUUID } = require("crypto");
 const tasks = require("../models/taskModel");
 const users = require("../models/userModel");
 
-//  Helper function
+// Helper to attach the user name to a task object
+const addAssignedUserName = (task) => {
+  const assignedUser = users.find((user) => user.id === task.assignedTo);
+
+  return {
+    ...task,
+    assignedToName: assignedUser ? assignedUser.name : "Unknown User",
+  };
+};
+
+// Helper function
 const isTaskBlocked = (task) => {
   // Task has no dependency
   if (!task.dependsOn) {
@@ -22,7 +32,7 @@ const isTaskBlocked = (task) => {
   return dependencyTask.status !== "Done";
 };
 
-//  Create Task
+// Create Task
 const createTask = (req, res) => {
   const { title, description, priority, status, assignedTo, dependsOn } =
     req.body;
@@ -80,18 +90,20 @@ const createTask = (req, res) => {
 
   res.status(201).json({
     message: "Task created successfully",
-    task: newTask,
+    task: addAssignedUserName(newTask),
   });
 };
 
-//  Get All Tasks
+// Get All Tasks
 const getAllTasks = (req, res) => {
+  const taskList = tasks.map(addAssignedUserName);
+
   res.json({
-    tasks,
+    tasks: taskList,
   });
 };
 
-//  Get Task By ID
+// Get Task By ID
 const getTaskById = (req, res) => {
   const { id } = req.params;
 
@@ -104,11 +116,11 @@ const getTaskById = (req, res) => {
   }
 
   res.json({
-    task,
+    task: addAssignedUserName(task),
   });
 };
 
-//  Update Task
+// Update Task
 const updateTask = (req, res) => {
   const { id } = req.params;
 
@@ -120,14 +132,14 @@ const updateTask = (req, res) => {
     });
   }
 
-  const { 
-    title, 
-    description, 
-    priority, 
-    status, 
-    assignedTo, 
-    dependsOn } =
-    req.body;
+  const {
+    title,
+    description,
+    priority,
+    status,
+    assignedTo,
+    dependsOn,
+  } = req.body;
 
   const validPriorities = ["Low", "Medium", "High"];
   const validStatuses = ["To Do", "In Progress", "Done"];
@@ -178,11 +190,11 @@ const updateTask = (req, res) => {
 
   res.json({
     message: "Task updated successfully",
-    task,
+    task: addAssignedUserName(task),
   });
 };
 
-//  Delete Task
+// Delete Task
 const deleteTask = (req, res) => {
   const { id } = req.params;
 
@@ -198,7 +210,7 @@ const deleteTask = (req, res) => {
 
   res.json({
     message: "Task deleted successfully",
-    task: deletedTask[0],
+    task: addAssignedUserName(deletedTask[0]),
   });
 };
 
@@ -226,7 +238,7 @@ const markTaskComplete = (req, res) => {
 
   res.json({
     message: "Task marked as completed",
-    task,
+    task: addAssignedUserName(task),
   });
 };
 
@@ -235,7 +247,7 @@ const getBlockedTasks = (req, res) => {
   const blockedTasks = tasks.filter((task) => isTaskBlocked(task));
 
   res.json({
-    tasks: blockedTasks,
+    tasks: blockedTasks.map(addAssignedUserName),
   });
 };
 
@@ -254,7 +266,7 @@ const getTasksByUser = (req, res) => {
   const userTasks = tasks.filter((task) => task.assignedTo === userId);
 
   res.json({
-    tasks: userTasks,
+    tasks: userTasks.map(addAssignedUserName),
   });
 };
 

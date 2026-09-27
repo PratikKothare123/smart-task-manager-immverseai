@@ -81,7 +81,7 @@ const TaskCard = ({
                     </span>
 
                     <span className="detail-value">
-                        {task.assignedTo}
+                        {task.assignedToName || "Unknown User"}
                     </span>
                 </div>
 
