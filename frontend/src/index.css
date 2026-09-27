@@ -1347,3 +1347,22 @@ a {
     font-weight: 600;
     text-decoration: underline;
 }
+
+.edit-task-button:hover {
+    background-color: #eadcf7;
+}
+
+.delete-task-button:hover {
+    background-color: #fef2f2;
+}
+
+.complete-task-button:hover {
+    background-color: #dff8ed;
+}
+
+.edit-task-button:disabled,
+.delete-task-button:disabled,
+.complete-task-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
