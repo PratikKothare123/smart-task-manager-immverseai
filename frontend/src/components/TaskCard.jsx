@@ -1,4 +1,31 @@
-const TaskCard = ({ task }) => {
+import { useState } from "react";
+
+const TaskCard = ({
+    task,
+    onEdit,
+    onDelete
+}) => {
+
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete "${task.title}"?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setDeleting(true);
+
+        try {
+            await onDelete(task.id);
+        } finally {
+            setDeleting(false);
+        }
+    };
+
     return (
         <div className="task-card">
 
@@ -49,6 +76,25 @@ const TaskCard = ({ task }) => {
                     Depends on another task
                 </div>
             )}
+
+            <div className="task-card-actions">
+
+                <button
+                    className="edit-task-button"
+                    onClick={() => onEdit(task)}
+                >
+                    Edit
+                </button>
+
+                <button
+                    className="delete-task-button"
+                    onClick={handleDelete}
+                    disabled={deleting}
+                >
+                    {deleting ? "Deleting..." : "Delete"}
+                </button>
+
+            </div>
 
         </div>
     );

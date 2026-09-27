@@ -862,3 +862,56 @@ a {
         width: 100%;
     }
 }
+
+/* ================================
+   Task Card Actions
+================================ */
+
+.task-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    margin-top: 15px;
+    padding-top: 12px;
+
+    border-top: 1px solid #f0f0f0;
+}
+
+.edit-task-button,
+.delete-task-button {
+    padding: 7px 12px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.edit-task-button {
+    background-color: #f3eafa;
+    border: 1px solid #e6d5f3;
+
+    color: #3d146b;
+}
+
+.edit-task-button:hover {
+    background-color: #eadcf5;
+}
+
+.delete-task-button {
+    background-color: #ffffff;
+    border: 1px solid #fecaca;
+
+    color: #dc2626;
+}
+
+.delete-task-button:hover {
+    background-color: #fef2f2;
+}
+
+.delete-task-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

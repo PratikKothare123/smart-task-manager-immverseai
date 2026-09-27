@@ -1,6 +1,12 @@
 import TaskCard from "./TaskCard";
 
-const TaskColumn = ({ title, tasks }) => {
+const TaskColumn = ({
+    title,
+    tasks,
+    onEdit,
+    onDelete
+}) => {
+
     return (
         <div className="task-column">
 
@@ -17,16 +23,24 @@ const TaskColumn = ({ title, tasks }) => {
             <div className="task-column-content">
 
                 {tasks.length === 0 ? (
+
                     <p className="empty-task-message">
                         No tasks
                     </p>
+
                 ) : (
+
                     tasks.map((task) => (
+
                         <TaskCard
                             key={task.id}
                             task={task}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
                         />
+
                     ))
+
                 )}
 
             </div>
