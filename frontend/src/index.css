@@ -915,3 +915,93 @@ a {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+
+/* ================================
+   Task Pages
+================================ */
+
+.task-page {
+    min-height: 100%;
+}
+
+.task-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.task-page-header h1 {
+    color: #3d146b;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.task-page-header p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.task-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.task-page-message {
+    padding: 25px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+
+    color: #6b7280;
+
+    text-align: center;
+}
+
+
+/* Complete button */
+
+.complete-task-button {
+    padding: 7px 12px;
+
+    border: 1px solid #ccebdd;
+    border-radius: 6px;
+
+    background-color: #ecfdf5;
+
+    color: #059669;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.complete-task-button:hover {
+    background-color: #dff8eb;
+}
+
+.complete-task-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 1000px) {
+
+    .task-board {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.blocked-task-list {
+    max-width: 700px;
+}
+
+.blocked-task-list .task-card {
+    margin-bottom: 15px;
+}

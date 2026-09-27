@@ -4,7 +4,8 @@ const TaskColumn = ({
     title,
     tasks,
     onEdit,
-    onDelete
+    onDelete,
+    onComplete
 }) => {
 
     return (
@@ -37,6 +38,7 @@ const TaskColumn = ({
                             task={task}
                             onEdit={onEdit}
                             onDelete={onDelete}
+                            onComplete={onComplete}
                         />
 
                     ))

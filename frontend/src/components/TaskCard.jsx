@@ -3,12 +3,15 @@ import { useState } from "react";
 const TaskCard = ({
     task,
     onEdit,
-    onDelete
+    onDelete,
+    onComplete
 }) => {
 
     const [deleting, setDeleting] = useState(false);
+    const [completing, setCompleting] = useState(false);
 
     const handleDelete = async () => {
+
         const confirmed = window.confirm(
             `Are you sure you want to delete "${task.title}"?`
         );
@@ -25,6 +28,19 @@ const TaskCard = ({
             setDeleting(false);
         }
     };
+
+    const handleComplete = async () => {
+
+        setCompleting(true);
+
+        try {
+            await onComplete(task.id);
+        } finally {
+            setCompleting(false);
+        }
+    };
+
+    const isCompleted = task.status === "Done";
 
     return (
         <div className="task-card">
@@ -79,6 +95,18 @@ const TaskCard = ({
 
             <div className="task-card-actions">
 
+                {!isCompleted && (
+                    <button
+                        className="complete-task-button"
+                        onClick={handleComplete}
+                        disabled={completing}
+                    >
+                        {completing
+                            ? "Completing..."
+                            : "Complete"}
+                    </button>
+                )}
+
                 <button
                     className="edit-task-button"
                     onClick={() => onEdit(task)}
@@ -91,7 +119,9 @@ const TaskCard = ({
                     onClick={handleDelete}
                     disabled={deleting}
                 >
-                    {deleting ? "Deleting..." : "Delete"}
+                    {deleting
+                        ? "Deleting..."
+                        : "Delete"}
                 </button>
 
             </div>
