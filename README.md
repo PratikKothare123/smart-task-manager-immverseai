@@ -4,8 +4,8 @@ A simple task manager where teams can create, assign, and track to-dos. It lets 
 
 ---
 ### 🌐 Live Demo
-- **Live Application:** [https://your-frontend-deployment-url.vercel.app](https://your-frontend-deployment-url.vercel.app)
-- **Backend API :** [https://your-backend-deployment-url.onrender.com](https://your-backend-deployment-url.onrender.com)
+- **Live Application:** [https://smart-task-manager-immverseai-8pxg-rho.vercel.app/login](https://smart-task-manager-immverseai-8pxg-rho.vercel.app/login)
+- **Backend API :** [https://smart-task-manager-immverseai.onrender.com/](https://smart-task-manager-immverseai.onrender.com/)
 
 ---
 ## Features
