@@ -1,64 +1,103 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import { AuthProvider } from "./context/AuthContext";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
-// import Login from "./pages/Login";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+
 import Dashboard from "./pages/Dashboard";
 import MyTasks from "./pages/MyTasks";
 import AllTasks from "./pages/AllTasks";
 import BlockedTasks from "./pages/BlockedTasks";
 import Users from "./pages/Users";
 
-function App() {
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
+import { useAuth } from "./context/AuthContext";
+
+
+const ProtectedRoute = ({ children }) => {
+    const { currentUser } = useAuth();
+
+    if (!currentUser) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
+};
+
+
+const App = () => {
+    const { currentUser } = useAuth();
+
     return (
-        <AuthProvider>
-            <BrowserRouter>
-                <Routes>
+        <BrowserRouter>
+            <Routes>
+
+                {/* Public Routes */}
+                <Route
+                    path="/login"
+                    element={
+                        currentUser
+                            ? <Navigate to="/" replace />
+                            : <Login />
+                    }
+                />
+
+                <Route
+                    path="/signup"
+                    element={
+                        currentUser
+                            ? <Navigate to="/" replace />
+                            : <Signup />
+                    }
+                />
+
+
+                {/* Protected Routes */}
+                <Route
+                    element={
+                        <ProtectedRoute>
+                            <MainLayout />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route path="/" element={<Dashboard />} />
 
                     <Route
-                            path="/login"
-                            element={<Login />}
+                        path="/my-tasks"
+                        element={<MyTasks />}
                     />
-                    <Route 
-                            path="/signup" 
-                            element={<Signup />} 
+
+                    <Route
+                        path="/all-tasks"
+                        element={<AllTasks />}
                     />
-                    <Route element={<MainLayout />}>
 
-                        <Route
-                            path="/"
-                            element={<Dashboard />}
+                    <Route
+                        path="/blocked-tasks"
+                        element={<BlockedTasks />}
+                    />
+
+                    <Route
+                        path="/users"
+                        element={<Users />}
+                    />
+                </Route>
+
+
+                {/* Unknown URL */}
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to={currentUser ? "/" : "/login"}
+                            replace
                         />
+                    }
+                />
 
-                        <Route
-                            path="/my-tasks"
-                            element={<MyTasks />}
-                        />
-
-                        <Route
-                            path="/all-tasks"
-                            element={<AllTasks />}
-                        />
-
-                        <Route
-                            path="/blocked-tasks"
-                            element={<BlockedTasks />}
-                        />
-
-                        <Route
-                            path="/users"
-                            element={<Users />}
-                        />
-
-                    </Route>
-
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
+            </Routes>
+        </BrowserRouter>
     );
-}
+};
 
 export default App;
